@@ -82,3 +82,13 @@ td:not([align]),
 th:not([align]) {
     text-align: left;
 }
+
+html,
+body,
+#app {
+    height: 100%;
+}
+
+.el-table {
+    margin: 10px 0;
+}

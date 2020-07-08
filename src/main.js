@@ -4,6 +4,13 @@ import router from './router'
 import store from './store'
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
+import Store from "store"
+
+//使用Store存数据方法名，数据名，数据
+// Store.set("user", { name: "123", age: 222 })
+//使用Store取数据
+// console.log(Store.get("user"))
+
 Vue.use(ElementUI);
 
 
