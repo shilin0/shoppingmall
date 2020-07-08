@@ -44,7 +44,7 @@
                             <el-button @click="delUser(scope.row.id)" type="danger" size="mini" icon="el-icon-delete"></el-button>
                         </el-tooltip>
                         <el-tooltip class="item" effect="dark" :enterable="false" content="分配角色" placement="top-start">
-                            <el-button type="warning" size="mini" icon="el-icon-setting"></el-button>
+                            <el-button type="warning"  @click="allotRights(scope.row)" size="mini" icon="el-icon-setting"></el-button>
                         </el-tooltip>
         </template>
         </el-table-column>
@@ -62,18 +62,26 @@
 </el-card>
    
 <UserAddEditDialog  ref="addOrEditDialog" @updateUserList="updateUserList" :userInfo="userInfo"></UserAddEditDialog> 
+
+<UserAllotRights ref="allotRights" @updateUserList="updateUserList" :allotUser="allotUser"  :roleList="roleList"></UserAllotRights>
+
 </div>
 </template>
 
 <script>
 import BreadcrumdNav from '@components/BreadcrumdNav.vue'
-import {reqUserList,reqUpdateState,reqDelUser} from '@network/api'
+// reqRoleUser
+import {reqUserList,reqUpdateState,reqDelUser,reqRoleList} from '@network/api'
 import UserAddEditDialog from '@/views/users/childComp/UserAddEditDialog.vue'
+import UserAllotRights from '@/views/users/childComp/UserAllotRights.vue'
+
+
 export default{
 name:"Users",
 components:{
     BreadcrumdNav,
-    UserAddEditDialog
+    UserAddEditDialog,
+    UserAllotRights
 },
 data(){
         return {
@@ -85,13 +93,24 @@ data(){
         }, //用户列表请求参数
         total:0 ,//总条数
         userInfo:{},
-        
+        allotUser:{} ,//分配角色信息
+         roleList:[] //角色列表
         }
       },
 created(){
 this.getUserList()
 },
 methods:{
+  //点击权限分配角色
+ async allotRights(userInfo){
+this.$refs.allotRights.dialogVisible = true
+this.allotUser = userInfo
+const result = await reqRoleList()
+  if (result.meta.status !== 200) return this.$message.error("获取角色列表失败")
+  this.roleList = result.data
+
+  },
+
   //点击删除
   delUser(id){
 
